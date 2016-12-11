@@ -15,6 +15,8 @@ will see if using both is useful/possible when i got some spare time
 
 baikal-manager requires nodejs, npm and optionally pm2 to run.
 
+for now you will need to remove the auth/session authorization in /var/www/f_settings.php and /var/www/f_status.php on all baikal miners you want to add.
+
 
 ### Installation
 

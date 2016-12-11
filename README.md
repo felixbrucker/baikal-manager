@@ -8,7 +8,7 @@ will see if using both is useful/possible when i got some spare time
 ### Screens
 
 ![Stats](/screens/stats.png?raw=true "Stats")
-![Config](/screens/config.png?raw=true "Config")
+![Config](/screens/config.PNG?raw=true "Config")
 
 
 ### Prerequisites

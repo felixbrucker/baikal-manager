@@ -1,0 +1,160 @@
+<form name="config">
+
+  <div class="row" style="margin-bottom: 10px;">
+    <div  class="col-md-12">
+      <a href="https://github.com/felixbrucker/profitability-service" target="_blank">Profitability-Service</a> URL: <input type="text" name="profitabilityServiceUrl" ng-model="configVm.config.profitabilityServiceUrl" size="26" placeholder="IP:PORT eg. 127.0.0.1:8081"> (in case autoswitching will be used)
+    </div>
+  </div>
+
+  <div class="row" style="margin-bottom: 10px;">
+    <div class="col-md-12">
+      <table class='table table-borderless'>
+        <tr>
+          <th>enabled</th>
+          <th>name</th>
+          <th>protocol</th>
+          <th>IP/hostname and port</th>
+          <th>group memberships</th>
+          <th>hashrate</th>
+          <th>action</th>
+        </tr>
+        <tr ng-repeat="entry in configVm.config.devices track by $index">
+          <td><input type="checkbox" ng-model="entry.enabled" ng-click="configVm.setConfig()"></td>
+          <td><input type="text" name="{{entry.name}}" ng-model="entry.name" placeholder="name" size="26" required></td>
+          <td><select name="protocolSelect-{{entry.name}}" ng-options="protocol for protocol in configVm.config.protocols" ng-model="entry.protocol" required></select></td>
+          <td><input type="text" name="{{entry.hostname}}" ng-model="entry.hostname" placeholder="192.168.0.101:80" size="26" required></td>
+          <td><select name="groupSelect-{{entry.id}}" ng-options="group.name as group.name for group in configVm.config.groups" ng-model="entry.groups" multiple required></select></td>
+          <td><input type="number" name="hashrate-{{entry.id}}" ng-model="entry.hashrate" placeholder="150" required> MH/s</td>
+          <td><button type="button" class="btn btn-warning" ng-click="configVm.delDevice(entry.id)">remove Device</button></td>
+        </tr>
+      </table>
+      <table class='table table-borderless'>
+        <tr style="border-top: 1px solid lightgrey;">
+          <td><input type="checkbox" ng-model="configVm.newDevice.enabled"></td>
+          <td><input type="text" name="newDeviceName" ng-model="configVm.newDevice.name" placeholder="name" size="26"></td>
+          <td><select name="protocolSelect-newDevice" ng-options="protocol for protocol in configVm.config.protocols" ng-model="configVm.newDevice.protocol"></select></td>
+          <td><input type="text" name="{{configVm.newDevice.hostname}}" ng-model="configVm.newDevice.hostname" placeholder="192.168.0.101:80" size="26"></td>
+          <td><select name="groupSelect-newDevice" ng-options="group.name as group.name for group in configVm.config.groups" ng-model="configVm.newDevice.groups" multiple></select></td>
+          <td><input type="number" name="hashrate-newDevice" ng-model="configVm.newDevice.hashrate" placeholder="150"> MH/s</td>
+          <td><button type="button" class="btn btn-success" ng-click="configVm.addDevice()">add Device</button></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+
+
+  <div class="row" style="margin-bottom: 10px;">
+    <div class="col-md-12">
+      <table class='table table-borderless'>
+        <tr>
+          <th>enabled</th>
+          <th>name</th>
+          <th>autoswitch</th>
+          <th>autoswitch interval</th>
+          <th>autoswitch region</th>
+          <th>action</th>
+        </tr>
+        <tr ng-repeat="entry in configVm.config.groups track by $index">
+          <td><input type="checkbox" ng-model="entry.enabled" ng-click="configVm.setConfig()"></td>
+          <td><input type="text" name="{{entry.name}}" ng-model="entry.name" placeholder="name" size="26" required></td>
+          <td><input type="checkbox" ng-model="entry.autoswitch" ng-click="configVm.setConfig()"></td>
+          <td><input type="number" name="asInterval-{{entry.id}}" ng-model="entry.interval" placeholder="3" required> min</td>
+          <td><select name="regionSelect-{{entry.id}}" ng-options="region for region in configVm.config.regions" ng-model="entry.region" required></select></td>
+          <td><button type="button" class="btn btn-warning" ng-click="configVm.delGroup(entry.id)">remove Group</button></td>
+        </tr>
+      </table>
+      <table class='table table-borderless'>
+        <tr style="border-top: 1px solid lightgrey;">
+          <td><input type="checkbox" ng-model="configVm.newGroup.enabled"></td>
+          <td><input type="text" name="newGroupName" ng-model="configVm.newGroup.name" placeholder="name" size="26"></td>
+          <td><input type="checkbox" ng-model="configVm.newGroup.autoswitch"></td>
+          <td><input type="number" name="asInterval-newGroup" ng-model="configVm.newGroup.interval" placeholder="3"> min</td>
+          <td><select name="regionSelect-newGroup" ng-options="region for region in configVm.config.regions" ng-model="configVm.newGroup.region"></select></td>
+          <td><button type="button" class="btn btn-success" ng-click="configVm.addGroup()">add Group</button></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+
+
+  <div class="row" style="margin-bottom: 10px;">
+    <div class="col-md-12">
+      <table class='table table-borderless'>
+        <tr>
+          <th>enabled</th>
+          <th>stratum address</th>
+          <th>username</th>
+          <th>password</th>
+          <th>priority</th>
+          <th>append device name to address</th>
+          <th>group</th>
+          <th>algorithm</th>
+          <th>action</th>
+        </tr>
+        <tr ng-repeat="entry in configVm.config.entries track by $index">
+          <td><input type="checkbox" ng-model="entry.enabled" ng-click="configVm.setConfig()"></td>
+          <td><input type="text" name="stratum-{{entry.id}}" ng-model="entry.stratum" placeholder="stratum+tcp://mining-dutch.nl:3358" size="42" required></td>
+          <td><input type="text" name="username-{{entry.id}}" ng-model="entry.username" placeholder="someone123" size="20" required></td>
+          <td><input type="text" name="password-{{entry.id}}" ng-model="entry.password" placeholder="x" size="4" required></td>
+          <td><input type="number" name="prio-{{entry.id}}" ng-model="entry.prio" placeholder="1" required></td>
+          <td><input type="checkbox" ng-model="entry.appendWorker" ng-click="configVm.setConfig()"></td>
+          <td><select name="groupSelect-{{entry.id}}" ng-options="group.name as group.name for group in configVm.config.groups" ng-model="entry.group" required></select></td>
+          <td><select name="algoSelect-{{entry.id}}" ng-options="algo for algo in configVm.config.algos" ng-model="entry.algo" required></select></td>
+          <td><button type="button" class="btn btn-warning" ng-click="configVm.delEntry(entry.id)">remove Pool</button></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+</form>
+<div class="row" style="margin-bottom: 10px;">
+  <div class="col-md-12">
+    <table class='table table-borderless'>
+      <tr style="border-top: 1px solid lightgrey;">
+        <td><input type="checkbox" ng-model="configVm.newEntry.enabled"></td>
+        <td><input type="text" name="stratum-newEntry" ng-model="configVm.newEntry.stratum" placeholder="stratum+tcp://mining-dutch.nl:3358" size="42" required></td>
+        <td><input type="text" name="username-newEntry" ng-model="configVm.newEntry.username" placeholder="someone123" size="20" required></td>
+        <td><input type="text" name="password-newEntry" ng-model="configVm.newEntry.password" placeholder="x" size="4" required></td>
+        <td><input type="number" name="prio-newEntry" ng-model="configVm.newEntry.prio" placeholder="1" required></td>
+        <td><input type="checkbox" ng-model="configVm.newEntry.appendWorker"></td>
+        <td><select name="groupSelect-newEntry" ng-options="group.name as group.name for group in configVm.config.groups" ng-model="configVm.newEntry.group" required></select></td>
+        <td><select name="algoSelect-newEntry" ng-options="algo for algo in configVm.config.algos" ng-model="configVm.newEntry.algo" required></select></td>
+        <td><button type="button" class="btn btn-success" ng-click="configVm.addEntry()">add Pool</button></td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+
+<div class="row" style="margin-bottom: 10px;">
+  <div class="col-md-12">
+    <button type="button" class="btn btn-success" ng-click="configVm.setConfig()" ng-disabled="config.$invalid">Save
+    </button>
+    <i ng-show="configVm.waiting" class="fa fa-cog fa-spin fa-lg fa-fw"></i>
+    <span class="sr-only">Loading...</span>
+  </div>
+</div>
+
+<div class="row" style="margin-bottom: 30px;">
+  <div class="col-md-12">
+    <button type="button" class="btn btn-primary" ng-click="configVm.deploy()" ng-disabled="config.$invalid">Deploy
+    </button>
+    <i ng-show="configVm.waitingDeploy" class="fa fa-cog fa-spin fa-lg fa-fw"></i>
+    <span class="sr-only">Loading...</span>
+  </div>
+</div>
+
+<div class="row" style="margin-bottom: 10px;">
+  <div class="col-md-12">
+    <button ng-show="!configVm.updating" type="button" class="btn btn-success" ng-click="configVm.update()"><i class="fa fa-refresh" aria-hidden="true"></i> Git Pull
+    </button>
+    <button ng-show="configVm.updating" type="button" class="btn btn-success" disabled><i class="fa fa-refresh" aria-hidden="true"></i> update running..
+    </button>
+    <i ng-show="configVm.updating" class="fa fa-cog fa-spin fa-lg fa-fw"></i>
+    <span class="sr-only">Loading...</span>
+  </div>
+</div>

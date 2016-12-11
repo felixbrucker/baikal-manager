@@ -25,7 +25,7 @@ function getMinerStats(device) {
     case "http":
       var req= http.request({
         host: arr[0],
-        path: '/f_status.php',
+        path: '/f_status.php?all=1',
         method: 'GET',
         port: arr[1],
         headers: {
@@ -62,7 +62,7 @@ function getMinerStats(device) {
     case "https":
       var req= https.request({
         host: arr[0],
-        path: '/f_status.php',
+        path: '/f_status.php?all=1',
         method: 'GET',
         port: arr[1],
         rejectUnauthorized: false,

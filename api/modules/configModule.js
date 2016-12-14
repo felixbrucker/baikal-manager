@@ -13,7 +13,8 @@ var config = module.exports = {
     entries:[],
     groups:[],
     devices:[],
-    profitabilityServiceUrl:null
+    profitabilityServiceUrl:null,
+    deployOnStartup:null
   },
   configNonPersistent:{
     protocols:[
@@ -55,9 +56,12 @@ var config = module.exports = {
         fs.readFile(configPath, 'utf8', function (err, data) {
           if (err) throw err;
           config.config = JSON.parse(data);
+          if(config.config.deployOnStartup===undefined)
+            config.config.deployOnStartup=false;
         });
       } else if (err.code == 'ENOENT') {
         //default conf
+        config.config.deployOnStartup=false;
         config.saveConfig();
         setTimeout(function(){
           config.loadConfig();

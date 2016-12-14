@@ -265,9 +265,11 @@ function deployConfigToMiner(device,query){
 }
 
 function init() {
-  setTimeout(function(){
-    deployAll();
-  },5000);
+  if(configModule.config.deployOnStartup){
+    setTimeout(function(){
+      deployAll();
+    },5000);
+  }
 }
 
 init();

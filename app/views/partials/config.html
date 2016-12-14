@@ -2,6 +2,12 @@
 
   <div class="row" style="margin-bottom: 10px;">
     <div  class="col-md-12">
+      Deploy on startup: <input type="checkbox" ng-model="configVm.config.deployOnStartup" ng-click="configVm.setConfig()"> (in case autoswitching will be used)
+    </div>
+  </div>
+
+  <div class="row" style="margin-bottom: 10px;">
+    <div  class="col-md-12">
       <a href="https://github.com/felixbrucker/profitability-service" target="_blank">Profitability-Service</a> URL: <input type="text" name="profitabilityServiceUrl" ng-model="configVm.config.profitabilityServiceUrl" size="26" placeholder="IP:PORT eg. 127.0.0.1:8081"> (in case autoswitching will be used)
     </div>
   </div>
@@ -90,7 +96,7 @@
           <th>username</th>
           <th>password</th>
           <th>priority</th>
-          <th>append device name to address</th>
+          <th>append device name to username</th>
           <th>group</th>
           <th>algorithm</th>
           <th>action</th>

@@ -24,7 +24,8 @@
             devices:[],
             groups:[],
             algos:[],
-            profitabilityServiceUrl:null
+            profitabilityServiceUrl:null,
+            deployOnStartup:null
         };
         vm.waiting = null;
         vm.waitingDeploy = null;
@@ -231,6 +232,7 @@
                 vm.config.algos=response.data.algos;
                 vm.config.regions=response.data.regions;
                 vm.config.profitabilityServiceUrl=response.data.profitabilityServiceUrl;
+                vm.config.deployOnStartup=response.data.deployOnStartup;
             }, function errorCallback(response) {
                 console.log(response);
             });

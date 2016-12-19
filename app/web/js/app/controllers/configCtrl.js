@@ -47,7 +47,6 @@
             enabled:true,
             name:"",
             autoswitch:false,
-            interval:"",
             region:null
         };
 
@@ -140,7 +139,7 @@
          * @memberOf configCtrl
          */
         function addGroup() {
-            if (vm.newGroup.name!==""&&vm.newGroup.name!==null&&vm.newGroup.interval!=""){
+            if (vm.newGroup.name!==""&&vm.newGroup.name!==null){
                 //gen unique id
                 vm.newGroup.id=Date.now();
                 //add to array
@@ -151,7 +150,6 @@
                     enabled:true,
                     name:"",
                     autoswitch:false,
-                    interval:"",
                     region:null
                 };
                 vm.setConfig();

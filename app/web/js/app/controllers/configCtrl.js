@@ -15,7 +15,7 @@
         .module('app')
         .controller('configCtrl', configController);
 
-    function configController($scope,$interval,$http) {
+    function configController($scope,$interval,$http,$filter) {
 
         var vm = this;
         vm.config = {
@@ -25,7 +25,8 @@
             groups:[],
             algos:[],
             profitabilityServiceUrl:null,
-            deployOnStartup:null
+            deployOnStartup:null,
+            autoswitchInterval:null
         };
         vm.waiting = null;
         vm.waitingDeploy = null;
@@ -233,6 +234,11 @@
                 vm.config.regions=response.data.regions;
                 vm.config.profitabilityServiceUrl=response.data.profitabilityServiceUrl;
                 vm.config.deployOnStartup=response.data.deployOnStartup;
+                vm.config.autoswitchInterval=response.data.autoswitchInterval;
+
+                vm.config.devices = $filter('orderBy')(vm.config.devices, 'name');
+                vm.config.groups = $filter('orderBy')(vm.config.groups, 'name');
+                vm.config.entries = $filter('orderBy')(vm.config.entries, ['group','prio']);
             }, function errorCallback(response) {
                 console.log(response);
             });

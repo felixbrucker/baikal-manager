@@ -13,6 +13,13 @@
   </div>
 
   <div class="row" style="margin-bottom: 10px;">
+    <div  class="col-md-12">
+      <input type="number" name="autoswitchInterval" ng-model="configVm.config.autoswitchInterval" placeholder="3"> min (in case autoswitching will be used)
+    </div>
+  </div>
+  <td></td>
+
+  <div class="row" style="margin-bottom: 10px;">
     <div class="col-md-12">
       <table class='table table-borderless'>
         <tr>
@@ -24,7 +31,7 @@
           <th>hashrate</th>
           <th>action</th>
         </tr>
-        <tr ng-repeat="entry in configVm.config.devices | orderBy:'name' track by $index">
+        <tr ng-repeat="entry in configVm.config.devices track by $index">
           <td><input type="checkbox" ng-model="entry.enabled" ng-click="configVm.setConfig()"></td>
           <td><input type="text" name="{{entry.name}}" ng-model="entry.name" placeholder="name" size="26" required></td>
           <td><select name="protocolSelect-{{entry.name}}" ng-options="protocol for protocol in configVm.config.protocols" ng-model="entry.protocol" required></select></td>
@@ -56,7 +63,6 @@
           <th>enabled</th>
           <th>name</th>
           <th>autoswitch</th>
-          <th>autoswitch interval</th>
           <th>autoswitch region</th>
           <th>action</th>
         </tr>
@@ -64,7 +70,6 @@
           <td><input type="checkbox" ng-model="entry.enabled" ng-click="configVm.setConfig()"></td>
           <td><input type="text" name="{{entry.name}}" ng-model="entry.name" placeholder="name" size="26" required></td>
           <td><input type="checkbox" ng-model="entry.autoswitch" ng-click="configVm.setConfig()"></td>
-          <td><input type="number" name="asInterval-{{entry.id}}" ng-model="entry.interval" placeholder="3" required> min</td>
           <td><select name="regionSelect-{{entry.id}}" ng-options="region for region in configVm.config.regions" ng-model="entry.region" required></select></td>
           <td><button type="button" class="btn btn-warning" ng-click="configVm.delGroup(entry.id)">remove Group</button></td>
         </tr>
@@ -72,7 +77,6 @@
           <td><input type="checkbox" ng-model="configVm.newGroup.enabled"></td>
           <td><input type="text" name="newGroupName" ng-model="configVm.newGroup.name" placeholder="name" size="26"></td>
           <td><input type="checkbox" ng-model="configVm.newGroup.autoswitch"></td>
-          <td><input type="number" name="asInterval-newGroup" ng-model="configVm.newGroup.interval" placeholder="3"> min</td>
           <td><select name="regionSelect-newGroup" ng-options="region for region in configVm.config.regions" ng-model="configVm.newGroup.region"></select></td>
           <td><button type="button" class="btn btn-success" ng-click="configVm.addGroup()">add Group</button></td>
         </tr>
@@ -97,7 +101,7 @@
           <th>algorithm</th>
           <th>action</th>
         </tr>
-        <tr ng-repeat="entry in configVm.config.entries | orderBy:['group','prio'] track by $index">
+        <tr ng-repeat="entry in configVm.config.entries track by $index">
           <td><input type="checkbox" ng-model="entry.enabled" ng-click="configVm.setConfig()"></td>
           <td><input type="text" name="stratum-{{entry.id}}" ng-model="entry.stratum" placeholder="stratum+tcp://mining-dutch.nl:3358" size="42" required></td>
           <td><input type="text" name="username-{{entry.id}}" ng-model="entry.username" placeholder="someone123" size="20" required></td>

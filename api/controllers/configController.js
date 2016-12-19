@@ -8,7 +8,8 @@ var colors = require('colors/safe');
 var configModule = require(__basedir + 'api/modules/configModule');
 
 var prevAlgos={};
-var profitTimer={};
+var profitTimer=null;
+var perDeviceConfig={};
 
 Array.prototype.contains = function(element){
   return this.indexOf(element) > -1;
@@ -112,19 +113,22 @@ function getAlgoForGroup(group){ //group is expected to be autoswitch-enabled
                 minerQuery.pools.push({url:parsed.result.url,user:entry.username+".#APPEND#",pass:entry.password,priority:entry.prio,algo:entry.algo});
               else
                 minerQuery.pools.push({url:parsed.result.url,user:entry.username,pass:entry.password,priority:entry.prio,algo:entry.algo});
-              break;
             }
           }
 
           if(prevAlgos[group.name]!==undefined){
             if(prevAlgos[group.name]!==parsed.result.algo){
-              //deploy new config
+              //set device to deploy new config
               for(var j=0;j< configModule.config.devices.length;j++) {
                 var device = configModule.config.devices[j];
                 if (device.enabled&&device.groups.contains(group.name)){
-                  (function(device,minerQuery){
-                    deployConfigToMiner(device,JSON.parse(JSON.stringify(minerQuery)));
-                  })(device,minerQuery);
+                  if (perDeviceConfig[device.id]===undefined)
+                    perDeviceConfig[device.id]={deploy:false};
+                  perDeviceConfig[device.id].deploy=true;
+                  if(perDeviceConfig[device.id].minerQuery===undefined)
+                    perDeviceConfig[device.id].minerQuery=JSON.parse(JSON.stringify(minerQuery));
+                  else
+                    perDeviceConfig[device.id].minerQuery.pools=perDeviceConfig[device.id].minerQuery.pools.concat(minerQuery.pools);
                 }
               }
               prevAlgos[group.name]=parsed.result.algo;
@@ -134,9 +138,15 @@ function getAlgoForGroup(group){ //group is expected to be autoswitch-enabled
             for(var j=0;j< configModule.config.devices.length;j++) {
               var device = configModule.config.devices[j];
               if (device.enabled&&device.groups.contains(group.name)){
-                (function(device,minerQuery){
-                  deployConfigToMiner(device,JSON.parse(JSON.stringify(minerQuery)));
-                })(device,minerQuery);
+                if (perDeviceConfig[device.id]===undefined)
+                  perDeviceConfig[device.id]={deploy:false};
+                perDeviceConfig[device.id].deploy=true;
+                if(perDeviceConfig[device.id].minerQuery===undefined)
+                  perDeviceConfig[device.id].minerQuery=JSON.parse(JSON.stringify(minerQuery));
+                else{
+                  perDeviceConfig[device.id].minerQuery.pools=perDeviceConfig[device.id].minerQuery.pools.concat(minerQuery.pools);
+                }
+
               }
             }
             prevAlgos[group.name]=parsed.result.algo;
@@ -154,20 +164,16 @@ function getAlgoForGroup(group){ //group is expected to be autoswitch-enabled
   req.end();
 }
 
-function deployAll(){
+function deployAll(forceDeploy){
+  perDeviceConfig={};
   if(configModule.config.groups!==undefined){
     for(var i=0;i< configModule.config.groups.length;i++) {
       var group = configModule.config.groups[i];
-      if(profitTimer[group.id]!==undefined)
-        clearInterval(profitTimer[group.id]);
       (function (group){
         if (group.enabled){
           if (group.autoswitch){
             if(configModule.config.profitabilityServiceUrl!==""&&configModule.config.profitabilityServiceUrl!==null&&configModule.config.profitabilityServiceUrl!==undefined){
               getAlgoForGroup(group);
-              profitTimer[group.id]=setInterval(function(){
-                getAlgoForGroup(group);
-              },1000*60*group.interval);
             }else{
               console.log(colors.red("Error: profitability url not configured"));
             }
@@ -184,24 +190,48 @@ function deployAll(){
                   query.pools.push({url:entry.stratum,user:entry.username,pass:entry.password,priority:entry.prio,algo:entry.algo});
               }
             }
+
+
             for(var j=0;j< configModule.config.devices.length;j++) {
               var device = configModule.config.devices[j];
               if (device.enabled&&device.groups.contains(group.name)){
-                (function(device,query){
-                  deployConfigToMiner(device,JSON.parse(JSON.stringify(query)));
-                })(device,query);
-
+                if (perDeviceConfig[device.id]===undefined)
+                  perDeviceConfig[device.id]={deploy:false};
+                if(forceDeploy)
+                  perDeviceConfig[device.id].deploy=true;
+                if(perDeviceConfig[device.id].minerQuery===undefined)
+                  perDeviceConfig[device.id].minerQuery=JSON.parse(JSON.stringify(query));
+                else
+                  perDeviceConfig[device.id].minerQuery.pools=perDeviceConfig[device.id].minerQuery.pools.concat(query.pools);
               }
             }
           }
         }
       })(group);
     }
+
+    //wait 2sec till deploy so profit stuff gets loaded fully #ugly
+    setTimeout(function(){
+      for(var j=0;j< configModule.config.devices.length;j++) {
+        var device = configModule.config.devices[j];
+        if (device.enabled&&perDeviceConfig[device.id].deploy){
+          (function(device,minerQuery){
+            deployConfigToMiner(device,JSON.parse(JSON.stringify(minerQuery)));
+          })(device,perDeviceConfig[device.id].minerQuery);
+        }
+      }
+    },2000);
+
   }
 }
 
 function deploy(req,res,next){
-  deployAll();
+  if(profitTimer!==null)
+    clearInterval(profitTimer);
+  deployAll(true);
+  profitTimer=setInterval(function(){
+    deployAll(false);
+  },1000*60*configModule.config.autoswitchInterval);
   res.setHeader('Content-Type', 'application/json');
   res.send(JSON.stringify({result:true}));
 }
@@ -267,9 +297,15 @@ function deployConfigToMiner(device,query){
 function init() {
   if(configModule.config.deployOnStartup){
     setTimeout(function(){
-      deployAll();
+      deployAll(false);
+      if(profitTimer!==null)
+        clearInterval(profitTimer);
+      profitTimer=setInterval(function(){
+        deployAll(false);
+      },1000*60*configModule.config.autoswitchInterval);
     },5000);
   }
+
 }
 
 init();

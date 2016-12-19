@@ -14,7 +14,8 @@ var config = module.exports = {
     groups:[],
     devices:[],
     profitabilityServiceUrl:null,
-    deployOnStartup:null
+    deployOnStartup:null,
+    autoswitchInterval:3
   },
   configNonPersistent:{
     protocols:[
@@ -58,6 +59,8 @@ var config = module.exports = {
           config.config = JSON.parse(data);
           if(config.config.deployOnStartup===undefined)
             config.config.deployOnStartup=false;
+          if(config.config.autoswitchInterval===undefined)
+            config.config.autoswitchInterval=3;
         });
       } else if (err.code == 'ENOENT') {
         //default conf

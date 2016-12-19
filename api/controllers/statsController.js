@@ -101,11 +101,17 @@ function getMinerStats(device) {
 }
 
 function init() {
+  for(var i=0;i<configModule.config.devices.length;i++){
+    var device=configModule.config.devices[i];
+    (function(device){
+      getMinerStats(JSON.parse(JSON.stringify(device)));
+    })(device);
+  }
   setInterval(function(){
     for(var i=0;i<configModule.config.devices.length;i++){
       var device=configModule.config.devices[i];
       (function(device){
-          getMinerStats(JSON.parse(JSON.stringify(device)));
+        getMinerStats(JSON.parse(JSON.stringify(device)));
       })(device);
     }
   },10000);

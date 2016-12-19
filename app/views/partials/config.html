@@ -33,9 +33,7 @@
           <td><input type="number" name="hashrate-{{entry.id}}" ng-model="entry.hashrate" placeholder="150" required> MH/s</td>
           <td><button type="button" class="btn btn-warning" ng-click="configVm.delDevice(entry.id)">remove Device</button></td>
         </tr>
-      </table>
-      <table class='table table-borderless'>
-        <tr style="border-top: 1px solid lightgrey;">
+        <tr style="border-top: 2px solid black;">
           <td><input type="checkbox" ng-model="configVm.newDevice.enabled"></td>
           <td><input type="text" name="newDeviceName" ng-model="configVm.newDevice.name" placeholder="name" size="26"></td>
           <td><select name="protocolSelect-newDevice" ng-options="protocol for protocol in configVm.config.protocols" ng-model="configVm.newDevice.protocol"></select></td>
@@ -70,9 +68,7 @@
           <td><select name="regionSelect-{{entry.id}}" ng-options="region for region in configVm.config.regions" ng-model="entry.region" required></select></td>
           <td><button type="button" class="btn btn-warning" ng-click="configVm.delGroup(entry.id)">remove Group</button></td>
         </tr>
-      </table>
-      <table class='table table-borderless'>
-        <tr style="border-top: 1px solid lightgrey;">
+        <tr style="border-top: 2px solid black;">
           <td><input type="checkbox" ng-model="configVm.newGroup.enabled"></td>
           <td><input type="text" name="newGroupName" ng-model="configVm.newGroup.name" placeholder="name" size="26"></td>
           <td><input type="checkbox" ng-model="configVm.newGroup.autoswitch"></td>
@@ -112,29 +108,22 @@
           <td><select name="algoSelect-{{entry.id}}" ng-options="algo for algo in configVm.config.algos" ng-model="entry.algo" required></select></td>
           <td><button type="button" class="btn btn-warning" ng-click="configVm.delEntry(entry.id)">remove Pool</button></td>
         </tr>
+        <tr style="border-top: 2px solid black;">
+          <td><input type="checkbox" ng-model="configVm.newEntry.enabled"></td>
+          <td><input type="text" name="stratum-newEntry" ng-model="configVm.newEntry.stratum" placeholder="stratum+tcp://mining-dutch.nl:3358" size="42"></td>
+          <td><input type="text" name="username-newEntry" ng-model="configVm.newEntry.username" placeholder="someone123" size="20"></td>
+          <td><input type="text" name="password-newEntry" ng-model="configVm.newEntry.password" placeholder="x" size="4"></td>
+          <td><input type="number" name="prio-newEntry" ng-model="configVm.newEntry.prio" placeholder="1"></td>
+          <td><input type="checkbox" ng-model="configVm.newEntry.appendWorker"></td>
+          <td><select name="groupSelect-newEntry" ng-options="group.name as group.name for group in configVm.config.groups" ng-model="configVm.newEntry.group"></select></td>
+          <td><select name="algoSelect-newEntry" ng-options="algo for algo in configVm.config.algos" ng-model="configVm.newEntry.algo"></select></td>
+          <td><button type="button" class="btn btn-success" ng-click="configVm.addEntry()">add Pool</button></td>
+        </tr>
       </table>
     </div>
   </div>
 
 </form>
-<div class="row" style="margin-bottom: 10px;">
-  <div class="col-md-12">
-    <table class='table table-borderless'>
-      <tr style="border-top: 1px solid lightgrey;">
-        <td><input type="checkbox" ng-model="configVm.newEntry.enabled"></td>
-        <td><input type="text" name="stratum-newEntry" ng-model="configVm.newEntry.stratum" placeholder="stratum+tcp://mining-dutch.nl:3358" size="42" required></td>
-        <td><input type="text" name="username-newEntry" ng-model="configVm.newEntry.username" placeholder="someone123" size="20" required></td>
-        <td><input type="text" name="password-newEntry" ng-model="configVm.newEntry.password" placeholder="x" size="4" required></td>
-        <td><input type="number" name="prio-newEntry" ng-model="configVm.newEntry.prio" placeholder="1" required></td>
-        <td><input type="checkbox" ng-model="configVm.newEntry.appendWorker"></td>
-        <td><select name="groupSelect-newEntry" ng-options="group.name as group.name for group in configVm.config.groups" ng-model="configVm.newEntry.group" required></select></td>
-        <td><select name="algoSelect-newEntry" ng-options="algo for algo in configVm.config.algos" ng-model="configVm.newEntry.algo" required></select></td>
-        <td><button type="button" class="btn btn-success" ng-click="configVm.addEntry()">add Pool</button></td>
-      </tr>
-    </table>
-  </div>
-</div>
-
 
 <div class="row" style="margin-bottom: 10px;">
   <div class="col-md-12">

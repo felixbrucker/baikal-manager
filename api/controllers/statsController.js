@@ -101,14 +101,14 @@ function getMinerStats(device) {
 }
 
 function init() {
-  for(var i=0;i<configModule.config.devices.length;i++){
-    var device=configModule.config.devices[i];
-    (function(device){
-      setInterval(function(){
-        getMinerStats(JSON.parse(JSON.stringify(device)));
-      },10000);
-    })(device);
-  }
+  setInterval(function(){
+    for(var i=0;i<configModule.config.devices.length;i++){
+      var device=configModule.config.devices[i];
+      (function(device){
+          getMinerStats(JSON.parse(JSON.stringify(device)));
+      })(device);
+    }
+  },10000);
 }
 
 setTimeout(init, 1000);

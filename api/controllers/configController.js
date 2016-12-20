@@ -214,7 +214,7 @@ function deployAll(forceDeploy){
     setTimeout(function(){
       for(var j=0;j< configModule.config.devices.length;j++) {
         var device = configModule.config.devices[j];
-        if (device.enabled&&perDeviceConfig[device.id].deploy){
+        if (device.enabled&&perDeviceConfig[device.id]!==undefined&&perDeviceConfig[device.id].deploy){
           (function(device,minerQuery){
             deployConfigToMiner(device,JSON.parse(JSON.stringify(minerQuery)));
           })(device,perDeviceConfig[device.id].minerQuery);
@@ -296,6 +296,7 @@ function deployConfigToMiner(device,query){
 
 function init() {
   if(configModule.config.deployOnStartup){
+    console.log("deploy on startup enabled...");
     setTimeout(function(){
       deployAll(false);
       if(profitTimer!==null)
@@ -308,7 +309,8 @@ function init() {
 
 }
 
-init();
+setTimeout(init,1000);
+
 
 exports.getConfig = getConfig;
 exports.setConfig = setConfig;

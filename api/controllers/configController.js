@@ -110,9 +110,9 @@ function getAlgoForGroup(group){ //group is expected to be autoswitch-enabled
             var entry = configModule.config.entries[i];
             if(entry.enabled&&entry.group===group.name&&entry.algo===parsed.result.algo){
               if(entry.appendWorker)
-                minerQuery.pools.push({url:parsed.result.url,user:entry.username+".#APPEND#",pass:entry.password,priority:entry.prio,algo:entry.algo});
+                minerQuery.pools.push({url:entry.stratum,user:entry.username+".#APPEND#",pass:entry.password,priority:entry.prio,algo:entry.algo});
               else
-                minerQuery.pools.push({url:parsed.result.url,user:entry.username,pass:entry.password,priority:entry.prio,algo:entry.algo});
+                minerQuery.pools.push({url:entry.stratum,user:entry.username,pass:entry.password,priority:entry.prio,algo:entry.algo});
             }
           }
 

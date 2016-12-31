@@ -226,6 +226,7 @@ function deployAll(forceDeploy){
 }
 
 function deploy(req,res,next){
+  prevAlgos={};
   if(profitTimer!==null)
     clearInterval(profitTimer);
   deployAll(true);

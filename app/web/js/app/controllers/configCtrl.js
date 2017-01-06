@@ -26,7 +26,8 @@
             algos:[],
             profitabilityServiceUrl:null,
             deployOnStartup:null,
-            autoswitchInterval:null
+            autoswitchInterval:null,
+            statsEnabled:null
         };
         vm.waiting = null;
         vm.waitingDeploy = null;
@@ -233,7 +234,7 @@
                 vm.config.profitabilityServiceUrl=response.data.profitabilityServiceUrl;
                 vm.config.deployOnStartup=response.data.deployOnStartup;
                 vm.config.autoswitchInterval=response.data.autoswitchInterval;
-
+                vm.config.statsEnabled=response.data.statsEnabled;
                 vm.config.devices = $filter('orderBy')(vm.config.devices, 'name');
                 vm.config.groups = $filter('orderBy')(vm.config.groups, 'name');
                 vm.config.entries = $filter('orderBy')(vm.config.entries, ['group','prio']);

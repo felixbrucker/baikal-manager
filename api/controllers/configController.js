@@ -6,6 +6,7 @@ var colors = require('colors/safe');
 
 
 var configModule = require(__basedir + 'api/modules/configModule');
+var statsController = require(__basedir + 'api/controllers/statsController');
 
 var prevAlgos={};
 var profitTimer=null;
@@ -16,15 +17,14 @@ Array.prototype.contains = function(element){
 };
 
 function getConfig(req, res, next) {
-  var obj=configModule.config;
-  obj.algos=configModule.configNonPersistent.algos;
-  obj.protocols=configModule.configNonPersistent.protocols;
-  obj.regions=configModule.configNonPersistent.regions;
   res.setHeader('Content-Type', 'application/json');
-  res.send(JSON.stringify(obj));
+  res.send(JSON.stringify(configModule.getConfig()));
 }
 function setConfig(req, res, next) {
+  var prev=JSON.parse(JSON.stringify(configModule.config.statsEnabled));
   configModule.setConfig(req.body);
+  if (prev!==req.body.statsEnabled)
+    statsController.restartInterval();
   configModule.saveConfig();
   res.setHeader('Content-Type', 'application/json');
   res.send(JSON.stringify({result: true}));

@@ -13,6 +13,8 @@ var stats = {
   entries:{}
 };
 
+var interval=null;
+
 function getStats(req, res, next) {
   res.setHeader('Content-Type', 'application/json');
   res.send(JSON.stringify(stats));
@@ -100,24 +102,31 @@ function getMinerStats(device) {
   }
 }
 
-function init() {
+function getAllMinerStats(){
   for(var i=0;i<configModule.config.devices.length;i++){
     var device=configModule.config.devices[i];
     (function(device){
       getMinerStats(JSON.parse(JSON.stringify(device)));
     })(device);
   }
-  setInterval(function(){
-    for(var i=0;i<configModule.config.devices.length;i++){
-      var device=configModule.config.devices[i];
-      (function(device){
-        getMinerStats(JSON.parse(JSON.stringify(device)));
-      })(device);
-    }
-  },10000);
+}
+
+function restartInterval(){
+  if (interval!==null)
+    clearInterval(interval);
+  if (configModule.config.statsEnabled) {
+    interval = setInterval(getAllMinerStats, 10000);
+  }
+}
+
+function init() {
+  if (configModule.config.statsEnabled){
+    getAllMinerStats();
+    interval=setInterval(getAllMinerStats,10000);
+  }
 }
 
 setTimeout(init, 1000);
 
 exports.getStats = getStats;
-
+exports.restartInterval = restartInterval;

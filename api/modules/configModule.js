@@ -15,7 +15,8 @@ var config = module.exports = {
     devices:[],
     profitabilityServiceUrl:null,
     deployOnStartup:null,
-    autoswitchInterval:3
+    autoswitchInterval:3,
+    statsEnabled:null
   },
   configNonPersistent:{
     protocols:[
@@ -38,9 +39,16 @@ var config = module.exports = {
     ]
   },
   getConfig: function () {
-    return config.config;
+    var obj=config.config;
+    obj.algos=config.configNonPersistent.algos;
+    obj.protocols=config.configNonPersistent.protocols;
+    obj.regions=config.configNonPersistent.regions;
+    return obj;
   },
   setConfig: function (newConfig) {
+    delete newConfig.algos;
+    delete newConfig.protocols;
+    delete newConfig.regions;
     config.config = newConfig;
   },
   saveConfig: function () {
@@ -61,10 +69,15 @@ var config = module.exports = {
             config.config.deployOnStartup=false;
           if(config.config.autoswitchInterval===undefined)
             config.config.autoswitchInterval=3;
+          if(config.config.statsEnabled===undefined)
+            config.config.statsEnabled=true;
+
         });
       } else if (err.code == 'ENOENT') {
         //default conf
         config.config.deployOnStartup=false;
+        config.config.statsEnabled=true;
+        config.config.autoswitchInterval=3;
         config.saveConfig();
         setTimeout(function(){
           config.loadConfig();

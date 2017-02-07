@@ -2,8 +2,7 @@
 
 (auto profit switching) baikal monitoring and configuration deployment software
 
-can use nicehash or zpool api via https://github.com/felixbrucker/profitability-service or run standalone without switching
-will see if using both is useful/possible when i got some spare time
+can use nicehash via https://github.com/felixbrucker/profitability-service or run standalone without switching
 
 ### Screens
 

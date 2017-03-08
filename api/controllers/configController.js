@@ -110,9 +110,9 @@ function getAlgoForGroup(group){ //group is expected to be autoswitch-enabled
             var entry = configModule.config.entries[i];
             if(entry.enabled&&entry.group===group.name&&entry.algo===parsed.result.algo){
               if(entry.appendWorker)
-                minerQuery.pools.push({url:entry.stratum,user:entry.username+".#APPEND#",pass:entry.password,priority:entry.prio,algo:entry.algo});
+                minerQuery.pools.push({url:entry.stratum,user:entry.username+".#APPEND#",pass:entry.password,priority:entry.prio,algo:entry.algo,extranonce:true});
               else
-                minerQuery.pools.push({url:entry.stratum,user:entry.username,pass:entry.password,priority:entry.prio,algo:entry.algo});
+                minerQuery.pools.push({url:entry.stratum,user:entry.username,pass:entry.password,priority:entry.prio,algo:entry.algo,extranonce:true});
             }
           }
 
@@ -185,9 +185,9 @@ function deployAll(forceDeploy){
               var entry = configModule.config.entries[j];
               if (entry.enabled&&entry.group===group.name){
                 if(entry.appendWorker)
-                  query.pools.push({url:entry.stratum,user:entry.username+".#APPEND#",pass:entry.password,priority:entry.prio,algo:entry.algo});
+                  query.pools.push({url:entry.stratum,user:entry.username+".#APPEND#",pass:entry.password,priority:entry.prio,algo:entry.algo,extranonce:true});
                 else
-                  query.pools.push({url:entry.stratum,user:entry.username,pass:entry.password,priority:entry.prio,algo:entry.algo});
+                  query.pools.push({url:entry.stratum,user:entry.username,pass:entry.password,priority:entry.prio,algo:entry.algo,extranonce:true});
               }
             }
 

@@ -1,9 +1,7 @@
 {
-  apps : {
-    name : "baikal-manager",
-    script : "main.js",
-    watch : true,
-    "ignore_watch" : ["node_modules", "app", "data", ".git"]
-  }
+  "name" : "baikal-manager",
+  "script" : "main.js",
+  "watch" : true,
+  "ignore_watch" : ["node_modules", "app", "data", ".git"]
 }
 
